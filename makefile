@@ -1,8 +1,10 @@
-emailbrowser: src/Email.java src/Main.java JSON-java
-	javac -cp lib/:lib/jars/*:src/ -d bin/ -Xlint:unchecked src/Main.java
+build: src/Email.java src/Main.java JSON-java spark
+	javac -cp lib/:lib/jar/*:src/ -d bin/ -Xlint:unchecked -Xlint:deprecation src/Main.java
+start: FORCE
+	java -cp bin/:lib/jar/* --add-modules java.activation Main appdata/emails/flat 1606243922741019288
 
 clean:
-	rm -r bin/*
+	rm -r bin/* || true
 gmvault: FORCE
 	if [ ! -d "gmvault/" ]; then\
 		virtualenv gmvault || (echo "Please install virtualenv" && exit 1);\
@@ -27,5 +29,10 @@ JSON-java: lib
 		if [ ! -d "lib/org/json" ]; then\
 			git clone https://github.com/stleary/JSON-java lib/org/json ; \
 		fi;
+spark: lib
+	if [ ! -d "lib/spark.git" ]; then\
+		git clone --branch 2.7.1 https://github.com/perwendel/spark lib/spark.git ;\
+		ln -s spark.git/src/main/java/spark lib/spark; \
+	fi;
 
 FORCE:

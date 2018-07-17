@@ -1,17 +1,35 @@
+import spark.Spark;
 import org.json.JSONException;
+import java.io.StringWriter;
+import java.io.PrintWriter;
 
 public class Main {
 
 	public static void main(String[] args) throws Exception {
-		String threadID = args[0];
-		String file_directory = args[1];
-		Email test = new Email(threadID, file_directory);
-		System.out.println(test.getContent());
-//		System.out.println(test.getID());
-//		System.out.println(test.getLabels());
-//		System.out.println(test.getSubject());
-//		System.out.println(test.getFromName());
-//		System.out.println(test.getFromEmail());
-//		System.out.println(test.getHeaders());
+		String fileDirectory = args[0];
+
+		Spark.setPort(8080);
+		Spark.get("/hello", new spark.Route() {
+			public String handle(spark.Request req, spark.Response res) throws Exception {
+				return "World!";
+			}
+		});
+		Spark.get("/email/:id", (spark.Request request, spark.Response response) -> {
+			String id = request.params(":id");
+			response.type("application/json");
+
+			try {
+				Email email = new Email(id, fileDirectory);
+				return String.format("{\"threadID\": \"%s\", \"from\": \"%s\"}", id, email.getFromEmail());
+			} catch (Throwable e) {
+				StringWriter sw = new StringWriter();
+				PrintWriter pw = new PrintWriter(sw);
+				e.printStackTrace(pw);
+				response.type("text/plain");
+				response.status(500);
+
+				return sw.toString();
+			}
+		});
 	}
 }
