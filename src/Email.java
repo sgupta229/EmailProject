@@ -12,6 +12,7 @@ import javax.mail.internet.*;
 
 public class Email implements IEmail { 
 	
+	private String id;
 	private String meta_file;
 	private String main_file;
 	private String file_directory;
@@ -20,13 +21,14 @@ public class Email implements IEmail {
 	Email (String threadID, String directory) throws Exception {
 		
 		Properties props = System.getProperties();
-        props.put("mail.host", "smtp.dummydomain.com");
-        props.put("mail.transport.protocol", "smtp");
-        Session mailSession = Session.getDefaultInstance(props, null);
+		props.put("mail.host", "smtp.dummydomain.com");
+		props.put("mail.transport.protocol", "smtp");
+		Session mailSession = Session.getDefaultInstance(props, null);
         
-		file_directory = directory;
+		this.id = threadID;
+		this.file_directory = directory;
 		//same as using '/' but easier for people to understand
-		meta_file = directory + File.separator + threadID + ".meta";
+		this.meta_file = directory + File.separator + threadID + ".meta";
 		
 		//create two files to test if the file that exists is zipped or not
 		File f = new File(directory + File.separator + threadID + ".eml");
@@ -34,14 +36,14 @@ public class Email implements IEmail {
 		
 		//if unzipped file exists
 		if (f.exists()) {
-			main_file = directory + File.separator + threadID + ".eml";
+			this.main_file = directory + File.separator + threadID + ".eml";
 			//obtains bytes from the file
 	        InputStream source = new FileInputStream(this.main_file);
 	        //create message using the bytes and the mailSession
 	        this.message = new MimeMessage(mailSession, source);
 		}
 		else if (f2.exists()) {
-			main_file = directory + File.separator + threadID + ".eml.gz";
+			this.main_file = directory + File.separator + threadID + ".eml.gz";
 			//GZIPInputStream reads COMPRESSED data from an input stream
 	        InputStream source = new GZIPInputStream(new FileInputStream(this.main_file));
 	        this.message = new MimeMessage(mailSession, source);
@@ -51,7 +53,7 @@ public class Email implements IEmail {
 		}
 	}
 	
-	private JSONObject convertToJSON() {
+	public JSONObject getMetadata() {
 		StringBuilder content = new StringBuilder();
 		//FileReader reads characters instead of bytes
 		//BufferedReader takes in a character input stream
@@ -93,10 +95,10 @@ public class Email implements IEmail {
 	@Override
 	public String getID() throws JSONException {
 		//get the message in JSON form
-		JSONObject test = convertToJSON();
+		JSONObject test = this.getMetadata();
 		//get the thread ID
-		Long stringID = test.getLong("thread_ids");
-		return Long.toString(stringID);
+		Number stringID = test.getNumber("thread_ids");
+		return stringID.toString();
 	}
 
 	@Override
@@ -154,7 +156,7 @@ public class Email implements IEmail {
 
 	@Override
 	public String getSubject() throws JSONException {
-		JSONObject test = convertToJSON();
+		JSONObject test = this.getMetadata();
 		String subject = test.getString("subject");
 		return subject;
 	}
@@ -162,7 +164,7 @@ public class Email implements IEmail {
 	@Override
 	//get the labels
 	public List<String> getLabels() throws JSONException {
-		JSONObject test = convertToJSON();
+		JSONObject test = this.getMetadata();
 		//make JSONArray of the labels
 		JSONArray end = test.getJSONArray("labels");
 		List<String> last = new ArrayList<String>();

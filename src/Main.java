@@ -2,6 +2,7 @@ import spark.Spark;
 import org.json.JSONException;
 import java.io.StringWriter;
 import java.io.PrintWriter;
+import org.json.JSONObject;
 
 public class Main {
 
@@ -20,7 +21,18 @@ public class Main {
 
 			try {
 				Email email = new Email(id, fileDirectory);
-				return String.format("{\"threadID\": \"%s\", \"from\": \"%s\"}", id, email.getFromEmail());
+				JSONObject obj = new JSONObject();
+				obj.put("id", email.getID());
+				obj.put("labels", email.getLabels());
+				obj.put("subject", email.getSubject());
+				JSONObject fromObj = new JSONObject();
+				fromObj.put("name", email.getFromName());
+				fromObj.put("email", email.getFromEmail());
+				obj.put("from", fromObj);
+				obj.put("headers", email.getHeaders());
+				obj.put("body", email.getContent());
+				obj.put("_meta_", email.getMetadata());
+				return obj;
 			} catch (Throwable e) {
 				StringWriter sw = new StringWriter();
 				PrintWriter pw = new PrintWriter(sw);
