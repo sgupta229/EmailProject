@@ -16,7 +16,7 @@ gmvault: FORCE
 	fi;\
 	GMVAULT_DIR=gmvault/.config; \
 	export GMVAULT_DIR; \
-	gmvault/bin/gmvault sync --debug -d appdata/emails/ $(email)
+	gmvault/bin/gmvault sync --debug -d appdata/emails/ --no-compression $(email)
 
 lib:
 	if [ ! -d "lib" ]; then\
