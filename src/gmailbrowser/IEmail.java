@@ -1,4 +1,4 @@
-package emailbrowser;
+package gmailbrowser;
 import java.io.IOException;
 import java.util.*;
 

@@ -1,4 +1,4 @@
-package emailbrowser.route;
+package gmailbrowser.route;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

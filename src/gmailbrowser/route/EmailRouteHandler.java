@@ -1,7 +1,7 @@
-package emailbrowser.route;
+package gmailbrowser.route;
 
 import org.json.JSONObject;
-import emailbrowser.Email;
+import gmailbrowser.Email;
 import spark.Request;
 import spark.Response;
 

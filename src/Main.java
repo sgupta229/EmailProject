@@ -1,4 +1,4 @@
-import emailbrowser.route.EmailRouteHandler;
+import gmailbrowser.route.EmailRouteHandler;
 import spark.Spark;
 
 public class Main {
