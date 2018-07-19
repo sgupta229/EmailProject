@@ -1,3 +1,4 @@
+package emailbrowser;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -18,7 +19,7 @@ public class Email implements IEmail {
 	private String file_directory;
 	private MimeMessage message;
 	
-	Email (String threadID, String directory) throws Exception {
+	public Email (String threadID, String directory) throws Exception {
 		
 		Properties props = System.getProperties();
 		props.put("mail.host", "smtp.dummydomain.com");
