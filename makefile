@@ -1,4 +1,5 @@
-build: src/emailbrowser/Email.java src/Main.java JSON-java spark
+build: src/gmailbrowser/Email.java src/Main.java JSON-java spark
+	mkdir -p bin
 	javac -cp lib/:lib/jar/*:src/ -d bin/ -Xlint:unchecked -Xlint:deprecation src/Main.java
 start: FORCE
 	java -cp bin/:lib/jar/* --add-modules java.activation Main appdata/emails/flat 1606243922741019288
