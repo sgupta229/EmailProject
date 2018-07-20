@@ -1,0 +1,23 @@
+group 'email-project'
+version '1.0-SNAPSHOT'
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'com.sparkjava:spark-core:2.7.1'
+    compile 'org.json:json:20180130'
+    compile 'javax.mail:mail:1.5.0-b01'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+task copyDependencies(type: Copy) {
+    into "$buildDir/libs"
+    from configurations.compile
+}
+
+build.dependsOn(copyDependencies)

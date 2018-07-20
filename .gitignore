@@ -1,5 +1,15 @@
+# Gradle specific files
 /bin/
-/lib/*
-!/lib/jar
+/build
+/.gradle
+# GMVault specific files.
 /appdata
 /gmvault
+# IntelliJ specific files.
+.idea/
+*.iml
+*.class
+# Eclipse specific files.
+.settings
+.project
+.classpath
