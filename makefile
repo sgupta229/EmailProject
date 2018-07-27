@@ -1,4 +1,4 @@
-build: 
+build: $(shell find src/main/java -name "*.java")  
 	# ./gradlew clean build # I generally use this to clean and build in one line but you already have a clean rule in make, so just using build below.
 	./gradlew build
 start: FORCE
