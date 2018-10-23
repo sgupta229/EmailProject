@@ -7,7 +7,6 @@ import spark.Response;
 
 /**
  * The route /email/:id
- * @author anuj (github.com/agupta7)
  *
  */
 public class EmailRouteHandler extends AbstractRouteHandler {
