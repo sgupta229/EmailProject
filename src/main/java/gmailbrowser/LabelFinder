@@ -1,0 +1,36 @@
+package gmailbrowser;
+import java.util.ArrayList;
+import java.util.List;
+import java.io.File;
+import java.io.FilenameFilter;
+
+public class LabelFinder {
+	
+	String emailsDirectory;
+	
+	public LabelFinder(String emailDirectory) {
+		this.emailsDirectory = emailDirectory;
+	}
+	
+	public List<Email> findLabels(String label) throws Exception{
+		List<Email> emailList = new ArrayList<Email>();
+		File directory = new File(emailsDirectory);
+		File[] fileList = directory.listFiles(new FilenameFilter() {
+			@Override
+			public boolean accept(File directory, String name) {
+				return name.toLowerCase().endsWith(".meta");
+			}
+		});
+		for (File file : fileList) {
+			String id = file.getName().split("\\.(?=[^\\.]+$)")[0];
+			Email test = new Email(id, this.emailsDirectory);
+			List<String> search = test.getLabels();
+			for (String i : search) {
+				if (i.equals(label)) {
+					emailList.add(test);
+				}
+			}
+		}
+		return emailList;
+	}
+}
