@@ -1,0 +1,39 @@
+package gmailbrowser.route;
+
+import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import gmailbrowser.Email;
+import gmailbrowser.LabelFinder;
+import spark.Request;
+import spark.Response;
+
+/**
+ * The route /emails/:label
+ * @author sahil (github.com/sgupta229)
+ *
+ */
+
+public class LabelsRouteHandler extends AbstractRouteHandler{
+	String emailsDirectory;
+	
+	public LabelsRouteHandler(String emailsDirectoryFlattened) {
+		this.emailsDirectory = emailsDirectoryFlattened;
+	}
+	
+	public JSONArray get(Request request, Response response) throws Exception {
+		
+		String label = request.params(":label");
+		label = "\\" + label;
+		JSONArray emails = new JSONArray();
+		LabelFinder find = new LabelFinder(emailsDirectory);
+		List<Email> emailsWithLabels = find.findLabels(label);
+		for(Email i : emailsWithLabels) {
+			JSONObject email = new JSONObject();
+			email.put("id", i.getID());
+			emails.put(email);
+		}
+		return emails;
+	}
+}
